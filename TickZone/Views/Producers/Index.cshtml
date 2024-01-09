@@ -1,0 +1,57 @@
+﻿@* Define model *@
+@* Here I have write IEnumerable so it can handle any kind of collection *@
+@model IEnumerable<TickZone.Models.Producer>
+
+@* Define ViewData *@
+@{
+    ViewData["Title"] = "List of Producers";
+}
+<h1>Producers</h1>
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="text-white">
+            <a  asp-action="Create" class="btn btn-success"><i class="bi bi-plus"></i>Add</a>
+        </div>
+        <hr />
+        <table class="table">
+            <thead>
+                <tr class="text-center">
+                    <th>@Html.DisplayNameFor(m => m.ProfilePicture)</th>
+                    <th>@Html.DisplayNameFor(m => m.FullName)</th>
+                    <th>@Html.DisplayNameFor(m => m.Bio)</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="align-middle">
+                            <img class="img-thumbnail" src="@item.ProfilePicture" alt="@item.FullName" style="max-width:150px" />
+                        </td>
+
+                        <td class="align-middle">
+                            @Html.DisplayFor(m => item.FullName)
+                        </td>
+
+                        <td class="align-middle">
+                            @Html.DisplayFor(m => item.Bio)
+                        </td>
+
+                        <td class="align-middle">
+                            <div class="btn-group">
+                                <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@item.Id"><i class="bi bi-pencil-square"></i>Edit</a>
+                                <a class="btn btn-outline-info" asp-action="Details" asp-route-id="@item.Id"><i class="bi bi-eye"></i>Details</a>
+                                <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id"><i class="bi bi-trash"></i>Delete</a>
+                            </div>
+
+                        </td>
+                    </tr>
+                }
+            </tbody>
+
+
+        </table>
+    </div>
+</div>
+

@@ -1,3 +1,7 @@
+using Microsoft.EntityFrameworkCore;
+using TickZone.Data;
+using TickZone.Data.Services;
+
 namespace TickZone
 {
     public class Program
@@ -7,10 +11,22 @@ namespace TickZone
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            builder.Services.AddScoped<IActorsServices,ActorService>();
+            builder.Services.AddScoped<IProducerService, ProducerService>();
+            builder.Services.AddScoped<ICinemaService, CinemaService>();
+
+
+            //we added addDbContext service
+            /* builder.Services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnection")));*/
+            builder.Services.AddDbContext<AppDbContext>(options
+                =>options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionString")));
             builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
             var app = builder.Build();
 
+            
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
@@ -28,7 +44,10 @@ namespace TickZone
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Movies}/{action=Index}/{id?}");
+
+            //Seed database
+            AppDbInitializer.Seed(app);
 
             app.Run();
         }
